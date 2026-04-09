@@ -1,1 +1,118 @@
 
+
+.announcement-carousal .carousel-item-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 30px 30px 0 0;
+} ye image na cut ho responsive me 
+
+Aapka issue object-fit: cover; ki wajah se aa raha hai — ye image ko container fill karne ke liye crop (cut) karta hai.
+
+Agar aap chahte ho ki image responsive ho aur cut na ho, toh cover ki jagah contain use karo 👇
+
+.announcement-carousal .carousel-item-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* change here */
+    display: block;
+    border-radius: 30px 30px 0 0;
+}
+Samajh lo difference:
+cover → container fill karega, image cut ho sakti hai ❌
+
+contain → poori image dikhegi, cut nahi hogi ✅ (lekin thoda gap aa sakta hai)
+
+Agar gap nahi chahiye aur phir bhi cut avoid karna hai:
+Height fix mat karo:
+
+.announcement-carousal .carousel-item-card img {
+    width: 100%;
+    height: auto; /* important */
+    object-fit: contain;
+}
+Best responsive approach (recommended)
+.announcement-carousal .carousel-item-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 30px 30px 0 0;
+}
+Agar aap chaho toh main aapke full carousel layout ke hisaab se perfect responsive fix bhi bana deta hoon 👍
+
+
+object ki width jayda h toh gap bhot aa rha h
+
+Samajh gaya 👍 — object-fit: contain; se image cut toh nahi hoti, lekin jab image ki width/ratio alag hoti hai toh extra gap (empty space) aa jata hai.
+
+👉 Aapka goal:
+
+Image cut bhi na ho ❌
+
+Gap bhi na aaye ❌
+
+⚠️ Problem: CSS me ek hi time pe no crop + no gap possible nahi hota jab aspect ratio different ho. Fir bhi best workaround de raha hoon 👇
+
+✅ Solution 1: Background image use karo (best UI control)
+.carousel-item-card {
+    background-image: url('your-image.jpg');
+    background-size: contain; /* ya cover */
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 250px; /* adjust */
+}
+👉 Yahan:
+
+contain → no cut, gap aa sakta hai
+
+cover → no gap, thoda crop hoga
+
+✅ Solution 2: Smart hybrid (mostly best)
+.announcement-carousal .carousel-item-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f5f5f5; /* optional */
+}
+
+.announcement-carousal .carousel-item-card img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+👉 Isse:
+
+Image cut nahi hogi ✅
+
+Gap controlled rahega (center me rahegi) ✅
+
+UI clean lagega ✅
+
+✅ Solution 3: Aspect ratio fix karo (pro solution)
+.carousel-item-card {
+    aspect-ratio: 16/9; /* ya jo bhi chahiye */
+    overflow: hidden;
+}
+
+.carousel-item-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+👉 Isme:
+
+Gap nahi aayega ✅
+
+Thoda crop hoga but controlled ✅
+
+Most professional look 🔥
+
+🔥 Final Recommendation
+👉 Agar perfect UI chahiye:
+
+Use aspect-ratio + cover
+
+👉 Agar image important hai (cut nahi chahiye):
+
+Use contain + center align
